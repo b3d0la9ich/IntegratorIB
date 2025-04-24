@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Услуги</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='services.css') }}">
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <h1>Услуги проекта: {{ project.name }}</h1>
+        <nav>
+            <a href="{{ url_for('list_projects', client_id=project.client_id) }}">← Назад к проектам</a>
+            {% if session.get("is_admin") %}
+                <a href="{{ url_for('add_service', project_id=project.id) }}">Добавить услугу</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <ul class="service-list">
+        {% for service in services %}
+            <li class="service-card ">
+                <div>
+                    <strong>{{ project.name }}</strong>
+                    <span class="status">({{ project.status }})</span><br>
+                    <small>С {{ project.start_date }} по {{ project.end_date or "без срока" }}</small>
+                </div>
+                <div class="actions">
+                    {% if service.status != 'завершена' and (session.get('is_admin') or project.user_id == session.get('user_id')) %}
+                        <form method="POST" action="{{ url_for('complete_service', service_id=service.id) }}"
+                                style="display:inline;">
+                            <button type="submit" class="btn">Завершить</button>
+                        </form>
+                    {% endif %}
+                    {% if session.get("is_admin") %}
+                        <form method="POST" action="{{ url_for('delete_service', service_id=service.id) }}"
+                                style="display:inline;" onsubmit="return confirm('Удалить услугу?')">
+                                <button type="submit" class="btn danger">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M6 7h12v2H6V7zm2 4h8v10H8V11zm2-7h4v2h-4V4z"/>
+                                </svg>
+                                Удалить
+                            </button>
+                        </form>
+                    {% endif %}
+                <div>
+            </li>
+        {% else %}
+            <li class="empty">Нет услуг.</li>
+        {% endfor %}
+    </ul>    
+</main>
+</body>
+</html>

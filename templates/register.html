@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="home-link">Главная страница</a>
+        </div>
+    </header>
+
+    <div class="auth-container">
+        <h2>Регистрация</h2>
+        <form method="POST" onsubmit="return validateForm()">
+            <input type="text" name="username" placeholder="Имя пользователя" required pattern=".*\S.*" title="Поле не может быть пустым или состоять только из пробелов">
+            <input type="password" name="password" placeholder="Пароль" required pattern=".*\S.*" title="Поле не может быть пустым или состоять только из пробелов">
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+        <p>Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a></p>
+    </div>
+</body>
+</html>

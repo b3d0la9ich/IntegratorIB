@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Клиенты</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='clients.css') }}">
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <h1>Список клиентов</h1>
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Главная</a>
+            {% if session.get('is_admin') %}
+                <a href="{{ url_for('add_client') }}">Добавить клиента</a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}">Выход</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <ul class="client-list">
+        {% for client in clients %}
+            <li>
+                <div class="client-name"><strong>{{ client.name }}</strong></div>
+                <div class="action-buttons">
+                    <button onclick="toggleDetails({{ client.id }})" class="btn">Показать</button>
+                    {% if session.get('is_admin') %}
+                        <button onclick="toggleEdit({{ client.id }})" class="btn">Редактировать</button>
+                        <form method="POST" action="{{ url_for('delete_client', client_id=client.id) }}"
+                              style="display:inline;" onsubmit="return confirm('Удалить клиента?')">
+                            <button type="submit" class="btn danger">Удалить</button>
+                        </form>
+                    {% endif %}
+                    <a class="btn" href="{{ url_for('list_projects', client_id=client.id) }}">Проекты</a>
+                </div>
+
+                <div id="details-{{ client.id }}" class="client-details collapsible">
+                    <p><strong>Контакт:</strong> {{ client.contact_name or '—' }}</p>
+                    <p><strong>Телефон:</strong> {{ client.phone or '—' }}</p>
+                    <p><strong>Email:</strong> {{ client.email or '—' }}</p>
+                    <p><strong>Сфера деятельности:</strong> {{ client.industry or '—' }}</p>
+                </div>
+
+                <form method="POST" action="{{ url_for('edit_client', client_id=client.id) }}"
+                    id="edit-{{ client.id }}" class="edit-form collapsible" onsubmit="return validateForm({{ client.id }})">
+                    <input name="name" id="name-{{ client.id }}" value="{{ client.name }}" required pattern=".*\S.*" title="Название клиента не может быть пустым">
+                    <input name="contact_name" id="contact-{{ client.id }}" value="{{ client.contact_name }}">
+                    <input name="phone" id="phone-{{ client.id }}" value="{{ client.phone }}" pattern="[\d\s\-\+()]{5,}" title="Введите корректный номер телефона">
+                    <input name="email" id="email-{{ client.id }}" value="{{ client.email }}" type="email">
+                    <input name="industry" id="industry-{{ client.id }}" value="{{ client.industry }}">
+                    <button type="submit" class="btn save">Сохранить</button>
+                </form>
+            </li>
+        {% else %}
+            <li class="empty">Нет клиентов.</li>
+        {% endfor %}
+    </ul>
+</main>
+
+<script>
+    function hideAllExcept(type, id) {
+        const details = document.querySelectorAll('.client-details.collapsible');
+        const forms = document.querySelectorAll('.edit-form.collapsible');
+
+        details.forEach(d => {
+            if (type !== 'details' || d.id !== `details-${id}`) d.classList.remove('open');
+        });
+
+        forms.forEach(f => {
+            if (type !== 'edit' || f.id !== `edit-${id}`) f.classList.remove('open');
+        });
+    }
+
+    function toggleDetails(id) {
+        const details = document.getElementById(`details-${id}`);
+        hideAllExcept('details', id);
+        details.classList.toggle('open');
+    }
+
+    function toggleEdit(id) {
+        const form = document.getElementById(`edit-${id}`);
+        hideAllExcept('edit', id);
+        form.classList.toggle('open');
+    }
+
+    function validateForm(id) {
+        const name = document.getElementById(`name-${id}`).value.trim();
+        const phone = document.getElementById(`phone-${id}`).value.trim();
+        const email = document.getElementById(`email-${id}`).value.trim();
+
+        if (name === "") {
+            alert("Название клиента не может быть пустым.");
+            return false;
+        }
+
+        if (phone && !/^[\d\s\-()+]{5,}$/.test(phone)) {
+            alert("Введите корректный номер телефона.");
+            return false;
+        }
+
+        if (email && !/^[\w\.-]+@[\w\.-]+\.\w{2,}$/.test(email)) {
+            alert("Введите корректный email.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+</body>
+</html>

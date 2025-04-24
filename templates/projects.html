@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Проекты клиента</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='projects.css') }}">
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <h1>Проекты клиента: {{ client.name }}</h1>
+        <nav>
+            <a href="{{ url_for('list_clients') }}">← Назад к клиентам</a>
+            {% if session.get("is_admin") %}
+                <a href="{{ url_for('add_project', client_id=client.id) }}">Добавить проект</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <ul class="project-list">
+        {% for project in projects %}
+            <li class="project-card {% if project.status == 'завершён' %}done{% endif %}">
+                <div>
+                    <strong>{{ project.name }}</strong>
+                    <span class="status">({{ project.status }})</span><br>
+                    <small>С {{ project.start_date }} по {{ project.end_date or "без срока" }}</small>
+                </div>
+                <div class="actions">
+                    {% if project.status != 'завершён' %}
+                    <a class="btn" href="{{ url_for('list_services', project_id=project.id) }}">Услуги</a>
+                    {% endif %}
+                    {% if session.get('is_admin') %}
+                        <form method="POST" action="{{ url_for('delete_project', project_id=project.id) }}"
+                              style="display:inline;" onsubmit="return confirm('Удалить проект?')">
+                            <button type="submit" class="btn danger">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M6 7h12v2H6V7zm2 4h8v10H8V11zm2-7h4v2h-4V4z"/>
+                                </svg>
+                                Удалить
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </li>
+        {% else %}
+            <li class="empty">Нет проектов.</li>
+        {% endfor %}
+    </ul>
+</main>
+</body>
+</html>

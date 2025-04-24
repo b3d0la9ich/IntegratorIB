@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Интегратор ИБ — Главная</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Интегратор ИБ</h1>
+        <p class="subtitle">Платформа управления клиентами, проектами и услугами в области информационной безопасности</p>
+
+        {% if session.get("user_id") %}
+            <div class="buttons">
+                <a class="btn" href="{{ url_for('dashboard') }}">Перейти в кабинет</a>
+                <a class="btn alt" href="{{ url_for('logout') }}">Выход</a>
+            </div>
+        {% else %}
+            <div class="buttons">
+                <a class="btn" href="{{ url_for('login') }}">Вход</a>
+                <a class="btn alt" href="{{ url_for('register') }}">Регистрация</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

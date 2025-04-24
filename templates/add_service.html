@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить услугу</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_service.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Добавление услуги</h1>
+            <nav>
+                <a href="{{ url_for('list_services', project_id=project_id) }}">← Назад к услугам</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <form method="POST" class="form-card">
+            <input type="text" name="service_type" placeholder="Тип услуги" required>
+
+            <label>Дата выполнения:</label>
+            <input type="date" id="execution_date" name="execution_date"
+                   min="{{ current_date }}"
+                   {% if project.end_date %} max="{{ project.end_date }}" {% endif %}
+                   required>
+
+            <p class="hint">Статус по умолчанию: <strong>в процессе</strong></p>
+
+            <button type="submit">Сохранить</button>
+        </form>
+    </main>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const execDate = document.getElementById("execution_date");
+        const today = new Date().toISOString().split("T")[0];
+        if (!execDate.getAttribute("min")) {
+            execDate.setAttribute("min", today);
+        }
+    });
+    </script>
+</body>
+</html>

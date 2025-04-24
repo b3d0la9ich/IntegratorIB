@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить клиента</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_client.css') }}">
+</head>
+<script>
+    function validateClientForm() {
+        const name = document.querySelector('[name="name"]');
+        if (!name.value.trim()) {
+            alert("Название организации обязательно.");
+            name.focus();
+            return false;
+        }
+        return true;
+    }
+</script>    
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Добавление клиента</h1>
+            <nav>
+                <a href="{{ url_for('list_clients') }}">← Назад к клиентам</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <form method="POST" class="form-card" onsubmit="return validateClientForm()">
+            <input type="text" name="name" placeholder="Название организации" required pattern=".*\S.*" title="Это поле обязательно">
+            
+            <input type="text" name="contact_name" placeholder="Контактное лицо">
+            
+            <input type="tel" name="phone" placeholder="Телефон" pattern="^\+?\d{10,15}$"
+                   title="Введите номер от 10 до 15 цифр, можно начинать с +">
+            
+            <input type="email" name="email" placeholder="Email">
+            
+            <input type="text" name="industry" placeholder="Сфера деятельности">
+            
+            <button type="submit">Сохранить</button>
+        </form>        
+    </main>
+</body>
+</html>

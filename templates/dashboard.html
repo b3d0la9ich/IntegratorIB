@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель управления</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Добро пожаловать, {{ session.username }}!</h1>
+            <nav>
+                <a href="{{ url_for('index') }}">Начальный экран</a>
+                {% if is_admin %}
+                    <a href="{{ url_for('list_clients') }}">Все клиенты</a>
+                    <a href="{{ url_for('add_client') }}">Добавить клиента</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}">Выход</a>
+            </nav>            
+        </div>
+    </header>
+
+    <main class="container">
+        {% if not session.get("is_admin") %}
+            <h2>Мои клиенты</h2>
+            <ul class="client-list">
+                {% for client in clients %}
+                    <li>
+                        <span>{{ client.name }}</span>
+                        <a class="btn" href="{{ url_for('list_projects', client_id=client.id) }}">Проекты</a>
+                    </li>
+                {% else %}
+                    <li class="empty">Нет доступных клиентов.</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="info-text">Вы вошли как администратор. Используйте навигацию сверху для управления системой.</p>
+        {% endif %}
+    </main>
+</body>
+</html>
