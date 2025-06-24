@@ -23,8 +23,10 @@
         {% for service in services %}
             <li class="service-card">
                 <div>
-                    <strong>{{ project.name }}</strong>
-                    <span class="status">({{ project.status }})</span><br>
+                    <strong>{{ service.name }}</strong>
+                    <span class="status">
+                        ({{ 'Закрытый' if project.status == 'завершён' else 'Активный' }})
+                    </span><br>
                     <small>С {{ project.start_date }} по {{ project.end_date or "без срока" }}</small>
                 </div>
                 <div class="actions">
@@ -50,7 +52,6 @@
         {% endfor %}
     </ul>
 
-    {# ✅ Кнопка "Завершить проект", если все услуги завершены #}
     {% if project.status != 'завершён' and services|length > 0 and services|selectattr('status', 'equalto', 'завершена')|list|length == services|length %}
         <form method="POST" action="{{ url_for('complete_project', project_id=project.id) }}" onsubmit="return confirm('Завершить проект?')">
             <button type="submit" class="btn save">Завершить проект</button>

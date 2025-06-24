@@ -16,7 +16,7 @@
     </header>
 
     <main class="container">
-        <form method="POST" class="form-card">
+        <form method="POST" class="form-card" onsubmit="return validateProjectDates()">
             <input type="text" name="name" placeholder="Название проекта" required>
 
             <label>Дата начала:</label>
@@ -37,18 +37,44 @@
     </main>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const startDate = document.getElementById("start_date");
-        const endDate = document.getElementById("end_date");
+    function validateProjectDates() {
+        const startDateInput = document.getElementById("start_date").value;
+        const endDateInput = document.getElementById("end_date").value;
+        const today = new Date().toISOString().split("T")[0];
 
-        startDate.addEventListener("change", function () {
-            if (startDate.value) {
-                let start = new Date(startDate.value);
-                start.setDate(start.getDate() + 1); // минимум завтра
-                const minEnd = start.toISOString().split("T")[0];
-                endDate.min = minEnd;
+        if (!startDateInput) {
+            alert("Дата начала обязательна");
+            return false;
+        }
+
+        const start = new Date(startDateInput);
+        const end = endDateInput ? new Date(endDateInput) : null;
+        const now = new Date(today);
+
+        if (start < now) {
+            alert("Дата начала не может быть в прошлом.");
+            return false;
+        }
+
+        if (end && end <= start) {
+            alert("Дата окончания должна быть хотя бы на день позже даты начала.");
+            return false;
+        }
+
+        return true;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const start = document.getElementById("start_date");
+        const end = document.getElementById("end_date");
+
+        start.addEventListener("change", function () {
+            if (start.value) {
+                const startDate = new Date(start.value);
+                startDate.setDate(startDate.getDate() + 1);
+                end.min = startDate.toISOString().split("T")[0];
             } else {
-                endDate.removeAttribute("min");
+                end.removeAttribute("min");
             }
         });
     });

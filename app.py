@@ -15,6 +15,12 @@ migrate = Migrate(app, db)
 def is_admin():
     return session.get("is_admin", False)
 
+def parse_date_safe(date_str):
+    try:
+        return datetime.strptime(date_str, "%Y-%m-%d")
+    except (ValueError, TypeError):
+        return None
+
 with app.app_context():
     db.create_all()
     print("👤 Проверка администратора...")
@@ -188,20 +194,35 @@ def add_project(client_id):
     users = User.query.all()
 
     if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        start_date = parse_date_safe(request.form.get("start_date"))
+        end_date = parse_date_safe(request.form.get("end_date"))
+        user_id = request.form.get("user_id")
+
+        if not name or not start_date or not user_id:
+            flash("Пожалуйста, заполните все обязательные поля корректно", "danger")
+            return redirect(request.url)
+
+        if end_date and end_date < start_date:
+            flash("Дата окончания не может быть раньше даты начала", "danger")
+            return redirect(request.url)
+
         project = Project(
-            name=request.form["name"],
-            status="активный",  
-            start_date=datetime.strptime(request.form["start_date"], "%Y-%m-%d"),
-            end_date=datetime.strptime(request.form["end_date"], "%Y-%m-%d"),
+            name=name,
+            status="активный",
+            start_date=start_date,
+            end_date=end_date,
             client_id=client_id,
-            user_id=int(request.form["user_id"])
+            user_id=int(user_id)
         )
+
         db.session.add(project)
         db.session.commit()
         flash("Проект добавлен", "success")
         return redirect(url_for("list_projects", client_id=client_id))
 
     return render_template("add_project.html", client_id=client_id, users=users, current_date=date.today().isoformat())
+
 
 @app.route("/projects/<int:project_id>/delete", methods=["POST"])
 def delete_project(project_id):
@@ -221,8 +242,10 @@ def delete_project(project_id):
 
 @app.route("/services/<int:project_id>")
 def list_services(project_id):
-    project = Project.query.get_or_404(project_id)
+    db.session.expire_all()  # сбрасываем кэшированные объекты
+    project = Project.query.get_or_404(project_id)  # получаем актуальный объект
     return render_template("services.html", project=project, services=project.services)
+
 
 @app.route("/services/add/<int:project_id>", methods=["GET", "POST"])
 def add_service(project_id):
@@ -289,21 +312,23 @@ def delete_service(service_id):
 
 @app.route("/projects/<int:project_id>/complete", methods=["POST"])
 def complete_project(project_id):
+    print(f"📦 Завершение проекта {project_id}...")
+
     project = Project.query.get_or_404(project_id)
 
     if not is_admin() and project.user_id != session.get("user_id"):
         flash("Нет прав завершить проект", "danger")
         return redirect(url_for("dashboard"))
 
-    # Проверим: все ли услуги завершены
     if any(service.status != "завершена" for service in project.services):
         flash("Нельзя завершить проект — не все услуги завершены", "warning")
         return redirect(url_for("list_services", project_id=project.id))
 
-    project.status = "завершён"
+    project.status = "завершён"  # <== Вот здесь обновляется!
     db.session.commit()
     flash("Проект успешно завершён!", "success")
-    return redirect(url_for("list_projects", client_id=project.client_id))
+
+    return redirect(url_for("list_services", project_id=project.id))
 
 
 if __name__ == "__main__":
