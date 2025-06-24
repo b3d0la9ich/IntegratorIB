@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Личный кабинет</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Личный кабинет</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-    <div class="background-gradient"></div>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="user-info">
+        <div class="avatar">👤</div>
+        <div class="username">{{ session.username }}</div>
+      </div>
+      <nav class="nav-links">
+        <a href="{{ url_for('index') }}">🏠 Главная</a>
+        <a href="{{ url_for('list_clients') }}">👥 Клиенты</a>
+        <a href="{{ url_for('logout') }}" class="logout">🚪 Выход</a>
+      </nav>
+    </aside>
 
-    <header class="header fade-in">
-        <div class="container">
-            <h1>👋 Добро пожаловать, <span class="username">{{ session.username }}</span>!</h1>
-            <nav class="nav">
-                <a href="{{ url_for('index') }}" class="btn">🏠 Главная</a>
-                <a href="{{ url_for('list_clients') }}" class="btn">👥 Клиенты</a>
-                <a href="{{ url_for('logout') }}" class="btn danger">🚪 Выход</a>
-            </nav>
+    <main class="main-content">
+      <h1>Добро пожаловать, <span>{{ session.username }}</span>!</h1>
+      <p class="subtext">Вы находитесь в системе управления проектами и клиентами ИБ.</p>
+
+      <section class="cards">
+        <div class="card">
+          <h2>👥 Клиенты</h2>
+          <p>Просмотр и управление клиентами компании</p>
+          <a href="{{ url_for('list_clients') }}" class="card-link">Перейти →</a>
         </div>
-    </header>
+      </section>
+    </main>
+  </div>
 </body>
 </html>

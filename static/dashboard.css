@@ -1,97 +1,147 @@
-/* ===== ОБЩИЕ НАСТРОЙКИ ===== */
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
-    color: #fff;
-    min-height: 100vh;
-    overflow-x: hidden;
-    animation: fadeIn 1s ease-out;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #fff;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
 }
 
-/* ===== АНИМАЦИЯ ===== */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.dashboard-container {
+  display: flex;
+  width: 100%;
 }
 
-/* ===== HEADER ===== */
-.header {
-    background-color: rgba(10, 20, 40, 0.9);
-    padding: 20px 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-    text-align: center;
-    animation: fadeIn 1.2s ease;
+.sidebar {
+  width: 240px;
+  background-color: #1e2a38;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.header h1 {
-    margin: 0;
-    font-size: 28px;
-    color: #ffffff;
+.user-info {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-nav {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
+.avatar {
+  font-size: 48px;
+  margin-bottom: 10px;
 }
 
-nav a {
-    color: #00d3ff;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    padding: 6px 14px;
-    border: 2px solid transparent;
-    border-radius: 6px;
-    transition: all 0.3s ease;
+.username {
+  font-size: 18px;
+  font-weight: 600;
 }
 
-nav a:hover {
-    background-color: rgba(0, 211, 255, 0.1);
-    border-color: #00d3ff;
-    color: #ffffff;
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-/* ===== ОСНОВНОЙ КОНТЕНТ ===== */
-.container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 0 20px;
-    text-align: center;
+.nav-links a {
+  text-decoration: none;
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  font-weight: 500;
 }
 
-.info-text {
-    font-size: 18px;
-    line-height: 1.6;
-    color: #dddddd;
-    animation: fadeIn 1.5s ease;
+.nav-links a:hover {
+  background-color: #2e3e52;
 }
 
-img.dashboard-illustration {
-    width: 100%;
-    max-width: 500px;
-    margin-top: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-    animation: fadeIn 2s ease;
+.nav-links .logout {
+  background-color: #e74c3c;
+  color: white;
+  font-weight: 600;
 }
 
-/* ===== МОБИЛКИ ===== */
-@media (max-width: 600px) {
-    .header h1 {
-        font-size: 22px;
-    }
+.nav-links .logout:hover {
+  background-color: #c0392b;
+}
 
-    nav a {
-        font-size: 14px;
-        padding: 5px 10px;
-    }
+.main-content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
 
-    .container {
-        margin: 30px 10px;
-    }
+.main-content h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.main-content h1 span {
+  color: #1abc9c;
+}
+
+.subtext {
+  color: #ccc;
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+
+.cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  flex: 1 1 250px;
+  min-width: 250px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.card h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 14px;
+  color: #bbb;
+  margin-bottom: 15px;
+}
+
+.card-link {
+  color: #1abc9c;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.card-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .main-content {
+    padding: 20px;
+  }
+
+  .cards {
+    flex-direction: column;
+  }
 }

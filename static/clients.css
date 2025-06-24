@@ -1,196 +1,150 @@
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
-    color: #fff;
-    min-height: 100vh;
-    overflow-x: hidden;
-    animation: fadeIn 1s ease-out;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #fff;
+  height: 100vh;
+  overflow: hidden;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.dashboard-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
 }
 
-.header {
-    background-color: rgba(10, 20, 40, 0.9);
-    padding: 20px 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-    text-align: center;
+.sidebar {
+  width: 240px;
+  background-color: #1e2a38;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.header h1 {
-    margin: 0;
-    font-size: 28px;
+.user-info {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-nav {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
+.avatar {
+  font-size: 48px;
+  margin-bottom: 10px;
 }
 
-nav a {
-    color: #00d3ff;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    padding: 6px 14px;
-    border: 2px solid transparent;
-    border-radius: 6px;
-    transition: all 0.3s ease;
+.username {
+  font-size: 18px;
+  font-weight: 600;
 }
 
-nav a:hover {
-    background-color: rgba(0, 211, 255, 0.1);
-    border-color: #00d3ff;
-    color: #ffffff;
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 0 20px;
-    text-align: center;
+.nav-links a {
+  text-decoration: none;
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  background-color: #2e3e52;
+}
+
+.nav-links .logout {
+  background-color: #e74c3c;
+  color: white;
+  font-weight: 600;
+}
+
+.nav-links .logout:hover {
+  background-color: #c0392b;
+}
+
+.main-content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.main-content h1 {
+  font-size: 28px;
+  margin-bottom: 30px;
 }
 
 .client-list {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .client-card {
-    background-color: rgba(255, 255, 255, 0.05);
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-    transition: background 0.3s ease, transform 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.client-card:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-    transform: translateY(-2px);
-}
-
-.client-header {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
+.card-header h2 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
 }
 
 .action-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    padding: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .btn {
-    min-width: 120px;
-    padding: 10px 16px;
-    font-size: 14px;
-    font-weight: 600;
-    text-align: center;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    color: #fff;
-    background-color: #555; 
-    transition: background-color 0.2s ease;
+  padding: 8px 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.btn:hover {
-    transform: scale(1.02);
-}
-
-.btn.info { background-color: #007bff; }
+.btn.info { background-color: #3498db; }
 .btn.warning { background-color: #f39c12; }
 .btn.danger { background-color: #e74c3c; }
+.btn.projects { background-color: #16a085; }
 .btn.save { background-color: #27ae60; }
 
-.btn.info:hover { background-color: #0056b3; }
-.btn.warning:hover { background-color: #d68910; }
-.btn.danger:hover { background-color: #c0392b; }
-.btn.save:hover { background-color: #1e8449; }
-
-.client-details,
-.edit-form {
-    background-color: rgba(255, 255, 255, 0.06);
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 10px;
-    animation: fadeIn 0.5s ease;
-}
-
-.edit-form input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #aaa;
-    border-radius: 6px;
-    box-sizing: border-box;
-    background-color: #f8f8f8;
-    color: #000;
-}
+.btn:hover { opacity: 0.9; }
 
 .collapsible {
-    display: none;
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease, opacity 0.4s ease;
+  display: none;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.06);
+  margin-top: 10px;
 }
 
 .collapsible.open {
-    display: block;
-    max-height: 1000px;
-    opacity: 1;
+  display: block;
+}
+
+.edit-form input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  color: #000;
 }
 
 .empty {
-    font-style: italic;
-    color: #ccc;
-    text-align: center;
-    margin-top: 40px;
-    font-size: 18px;
-}
-
-@media (max-width: 600px) {
-    .client-card {
-        padding: 15px;
-    }
-
-    .btn {
-        font-size: 13px;
-        padding: 6px 10px;
-        min-width: 100%;
-    }
-
-    .header h1 {
-        font-size: 22px;
-    }
-
-    .action-buttons {
-        flex-direction: column;
-        align-items: stretch;
-    }
-}
-
-.btn.projects {
-    background-color: #16a085;
-}
-
-.btn.projects:hover {
-    background-color: #117a65;
-}
-
-a.btn {
-    display: inline-block; 
+  color: #ccc;
+  font-style: italic;
+  margin-top: 30px;
 }

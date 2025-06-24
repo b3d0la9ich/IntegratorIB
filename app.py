@@ -15,7 +15,6 @@ migrate = Migrate(app, db)
 def is_admin():
     return session.get("is_admin", False)
 
-# 🛠️ Инициализация и создание админа
 with app.app_context():
     db.create_all()
     print("👤 Проверка администратора...")
@@ -33,7 +32,6 @@ with app.app_context():
 def index():
     return render_template("index.html")
 
-# 🔐 Регистрация / Вход / Выход
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -72,7 +70,6 @@ def logout():
     flash("Вы вышли", "info")
     return redirect(url_for("login"))
 
-# 📊 Дашборд
 @app.route("/dashboard")
 def dashboard():
     if "user_id" not in session:
@@ -160,7 +157,6 @@ def delete_client(client_id):
     flash("Клиент удалён", "info")
     return redirect(url_for("list_clients"))
 
-# 📁 Проекты
 @app.route("/projects/<int:client_id>")
 def list_projects(client_id):
     if "user_id" not in session:
@@ -168,14 +164,12 @@ def list_projects(client_id):
 
     client = Client.query.get_or_404(client_id)
 
-    # Проверка доступа для сотрудника
     if not is_admin():
         allowed = Project.query.filter_by(client_id=client.id, user_id=session["user_id"]).count()
         if allowed == 0:
             flash("Нет доступа к этому клиенту", "danger")
             return redirect(url_for("dashboard"))
 
-    # 💡 Фильтрация
     status_filter = request.args.get("status")
     if status_filter:
         projects = Project.query.filter_by(client_id=client.id, status=status_filter).all()
@@ -218,7 +212,6 @@ def delete_project(project_id):
     project = Project.query.get_or_404(project_id)
     client_id = project.client_id
 
-    # Удаляем связанные услуги
     Service.query.filter_by(project_id=project_id).delete()
 
     db.session.delete(project)
@@ -226,7 +219,6 @@ def delete_project(project_id):
     flash("Проект удалён", "info")
     return redirect(url_for("list_projects", client_id=client_id))
 
-# 🛠️ Услуги
 @app.route("/services/<int:project_id>")
 def list_services(project_id):
     project = Project.query.get_or_404(project_id)
@@ -314,6 +306,5 @@ def complete_project(project_id):
     return redirect(url_for("list_projects", client_id=project.client_id))
 
 
-# 🚀 Запуск
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
