@@ -196,7 +196,7 @@ def add_project(client_id):
     if request.method == "POST":
         project = Project(
             name=request.form["name"],
-            status="активный",  # 🔥 Жёстко задаём статус
+            status="активный",  
             start_date=datetime.strptime(request.form["start_date"], "%Y-%m-%d"),
             end_date=datetime.strptime(request.form["end_date"], "%Y-%m-%d"),
             client_id=client_id,
@@ -277,14 +277,7 @@ def complete_service(service_id):
     service.status = "завершена"
     db.session.commit()
 
-    # Проверка: если все услуги завершены — закрываем проект
-    all_services = Service.query.filter_by(project_id=project.id).all()
-    if all(s.status == "завершена" for s in all_services):
-        project.status = "завершён"
-        db.session.commit()
-        flash("Все услуги завершены — проект закрыт автоматически", "success")
-    else:
-        flash("Услуга завершена", "success")
+    flash("Услуга завершена", "success")
 
     return redirect(url_for("list_services", project_id=project.id))
 
@@ -301,6 +294,25 @@ def delete_service(service_id):
     db.session.commit()
     flash("Услуга удалена", "info")
     return redirect(url_for("list_services", project_id=project_id))
+
+@app.route("/projects/<int:project_id>/complete", methods=["POST"])
+def complete_project(project_id):
+    project = Project.query.get_or_404(project_id)
+
+    if not is_admin() and project.user_id != session.get("user_id"):
+        flash("Нет прав завершить проект", "danger")
+        return redirect(url_for("dashboard"))
+
+    # Проверим: все ли услуги завершены
+    if any(service.status != "завершена" for service in project.services):
+        flash("Нельзя завершить проект — не все услуги завершены", "warning")
+        return redirect(url_for("list_services", project_id=project.id))
+
+    project.status = "завершён"
+    db.session.commit()
+    flash("Проект успешно завершён!", "success")
+    return redirect(url_for("list_projects", client_id=project.client_id))
+
 
 # 🚀 Запуск
 if __name__ == "__main__":

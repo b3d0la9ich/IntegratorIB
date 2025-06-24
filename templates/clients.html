@@ -8,13 +8,13 @@
 <body>
 <header class="header">
     <div class="container">
-        <h1>Список клиентов</h1>
+        <h1>👥 Список клиентов</h1>
         <nav>
-            <a href="{{ url_for('dashboard') }}">Главная</a>
+            <a href="{{ url_for('dashboard') }}">🏠 Главная</a>
             {% if session.get('is_admin') %}
-                <a href="{{ url_for('add_client') }}">Добавить клиента</a>
+                <a href="{{ url_for('add_client') }}">➕ Добавить клиента</a>
             {% endif %}
-            <a href="{{ url_for('logout') }}">Выход</a>
+            <a href="{{ url_for('logout') }}">🚪 Выход</a>
         </nav>
     </div>
 </header>
@@ -22,18 +22,20 @@
 <main class="container">
     <ul class="client-list">
         {% for client in clients %}
-            <li>
-                <div class="client-name"><strong>{{ client.name }}</strong></div>
+            <li class="client-card">
+                <div class="client-header">{{ client.name }}</div>
                 <div class="action-buttons">
-                    <button onclick="toggleDetails({{ client.id }})" class="btn">Показать</button>
+                    <button class="btn info" onclick="toggleDetails({{ client.id }})">Показать</button>
                     {% if session.get('is_admin') %}
-                        <button onclick="toggleEdit({{ client.id }})" class="btn">Редактировать</button>
+                        <button class="btn warning" onclick="toggleEdit({{ client.id }})">Редактировать</button>
                         <form method="POST" action="{{ url_for('delete_client', client_id=client.id) }}"
-                              style="display:inline;" onsubmit="return confirm('Удалить клиента?')">
+                              onsubmit="return confirm('Удалить клиента?')" style="display:inline;">
                             <button type="submit" class="btn danger">Удалить</button>
                         </form>
                     {% endif %}
-                    <a class="btn" href="{{ url_for('list_projects', client_id=client.id) }}">Проекты</a>
+                    <form action="{{ url_for('list_projects', client_id=client.id) }}">
+                        <button type="submit" class="btn projects">Проекты</button>
+                    </form>
                 </div>
 
                 <div id="details-{{ client.id }}" class="client-details collapsible">
@@ -44,11 +46,11 @@
                 </div>
 
                 <form method="POST" action="{{ url_for('edit_client', client_id=client.id) }}"
-                    id="edit-{{ client.id }}" class="edit-form collapsible" onsubmit="return validateForm({{ client.id }})">
-                    <input name="name" id="name-{{ client.id }}" value="{{ client.name }}" required pattern=".*\S.*" title="Название клиента не может быть пустым">
+                      id="edit-{{ client.id }}" class="edit-form collapsible" onsubmit="return validateForm({{ client.id }})">
+                    <input name="name" id="name-{{ client.id }}" value="{{ client.name }}" required>
                     <input name="contact_name" id="contact-{{ client.id }}" value="{{ client.contact_name }}">
-                    <input name="phone" id="phone-{{ client.id }}" value="{{ client.phone }}" pattern="[\d\s\-\+()]{5,}" title="Введите корректный номер телефона">
-                    <input name="email" id="email-{{ client.id }}" value="{{ client.email }}" type="email">
+                    <input name="phone" id="phone-{{ client.id }}" value="{{ client.phone }}">
+                    <input name="email" id="email-{{ client.id }}" value="{{ client.email }}">
                     <input name="industry" id="industry-{{ client.id }}" value="{{ client.industry }}">
                     <button type="submit" class="btn save">Сохранить</button>
                 </form>
@@ -61,15 +63,9 @@
 
 <script>
     function hideAllExcept(type, id) {
-        const details = document.querySelectorAll('.client-details.collapsible');
-        const forms = document.querySelectorAll('.edit-form.collapsible');
-
-        details.forEach(d => {
-            if (type !== 'details' || d.id !== `details-${id}`) d.classList.remove('open');
-        });
-
-        forms.forEach(f => {
-            if (type !== 'edit' || f.id !== `edit-${id}`) f.classList.remove('open');
+        document.querySelectorAll('.collapsible').forEach(el => {
+            if (!el.classList.contains('open') || el.id === `${type}-${id}`) return;
+            el.classList.remove('open');
         });
     }
 

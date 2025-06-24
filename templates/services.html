@@ -21,7 +21,7 @@
 <main class="container">
     <ul class="service-list">
         {% for service in services %}
-            <li class="service-card ">
+            <li class="service-card">
                 <div>
                     <strong>{{ project.name }}</strong>
                     <span class="status">({{ project.status }})</span><br>
@@ -29,15 +29,13 @@
                 </div>
                 <div class="actions">
                     {% if service.status != 'завершена' and (session.get('is_admin') or project.user_id == session.get('user_id')) %}
-                        <form method="POST" action="{{ url_for('complete_service', service_id=service.id) }}"
-                                style="display:inline;">
+                        <form method="POST" action="{{ url_for('complete_service', service_id=service.id) }}" style="display:inline;">
                             <button type="submit" class="btn">Завершить</button>
                         </form>
                     {% endif %}
                     {% if session.get("is_admin") %}
-                        <form method="POST" action="{{ url_for('delete_service', service_id=service.id) }}"
-                                style="display:inline;" onsubmit="return confirm('Удалить услугу?')">
-                                <button type="submit" class="btn danger">
+                        <form method="POST" action="{{ url_for('delete_service', service_id=service.id) }}" style="display:inline;" onsubmit="return confirm('Удалить услугу?')">
+                            <button type="submit" class="btn danger">
                                 <svg viewBox="0 0 24 24">
                                     <path d="M6 7h12v2H6V7zm2 4h8v10H8V11zm2-7h4v2h-4V4z"/>
                                 </svg>
@@ -45,12 +43,19 @@
                             </button>
                         </form>
                     {% endif %}
-                <div>
+                </div>
             </li>
         {% else %}
             <li class="empty">Нет услуг.</li>
         {% endfor %}
-    </ul>    
+    </ul>
+
+    {# ✅ Кнопка "Завершить проект", если все услуги завершены #}
+    {% if project.status != 'завершён' and services|length > 0 and services|selectattr('status', 'equalto', 'завершена')|list|length == services|length %}
+        <form method="POST" action="{{ url_for('complete_project', project_id=project.id) }}" onsubmit="return confirm('Завершить проект?')">
+            <button type="submit" class="btn save">Завершить проект</button>
+        </form>
+    {% endif %}
 </main>
 </body>
 </html>

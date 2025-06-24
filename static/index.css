@@ -1,73 +1,185 @@
-body {
+body, html {
     margin: 0;
     padding: 0;
-    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
+    color: white;
+    height: 100%;
+    overflow-y: auto;
 }
 
-.container {
+.intro-section {
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.4);
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    width: 90%;
-    max-width: 600px;
+    padding: 80px 20px 40px;
 }
 
-h1 {
-    font-size: 32px;
-    margin-bottom: 10px;
-    color: #00bcd4;
+.intro-section h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+    animation: fadeInDown 1s ease-out;
 }
 
 .subtitle {
-    font-size: 16px;
+    font-size: 18px;
     color: #ccc;
     margin-bottom: 30px;
-}
-
-.welcome {
-    font-size: 18px;
-    margin-bottom: 20px;
 }
 
 .buttons {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 .btn {
-    padding: 10px 20px;
+    padding: 10px 22px;
+    background-color: #00d3ee;
     border: none;
-    background-color: #00bcd4;
-    color: #fff;
+    border-radius: 25px;
+    color: white;
     text-decoration: none;
     font-weight: bold;
-    border-radius: 6px;
-    transition: background 0.3s;
+    font-size: 16px;
+    transition: background 0.3s ease;
 }
 
 .btn:hover {
-    background-color: #00acc1;
+    background-color: #00bbd4;
 }
 
 .btn.alt {
     background-color: transparent;
-    border: 2px solid #00bcd4;
-    color: #00bcd4;
+    border: 2px solid #00d3ee;
 }
 
 .btn.alt:hover {
-    background-color: #00bcd4;
+    background-color: #00d3ee;
     color: white;
 }
 
+.features-section {
+    padding: 40px 20px;
+    text-align: center;
+}
 
+.features-section h2 {
+    font-size: 26px;
+    margin-bottom: 30px;
+    color: #fff;
+}
+
+.features-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.feature-card {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 20px 25px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-card .icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+}
+
+.feature-card h3 {
+    color: #00d3ee;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.feature-card p {
+    font-size: 14px;
+    color: #ddd;
+}
+
+.footer {
+    text-align: center;
+    color: #aaa;
+    padding: 40px 20px 20px;
+    font-size: 14px;
+}
+
+/* Анимация */
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animated-bg {
+    position: fixed;
+    top: -10%;
+    left: -10%;
+    width: 120vw;
+    height: 120vh;
+    z-index: 0;
+    opacity: 0.25;
+    pointer-events: none;
+}
+body > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Анимация плавного появления */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Применяем анимацию ко всем ключевым секциям */
+.intro-section,
+.features-section,
+.feature-card,
+.footer {
+    opacity: 0;
+    animation: fadeInUp 1s ease forwards;
+}
+
+/* Задержка для последовательного появления */
+.intro-section {
+    animation-delay: 0.2s;
+}
+.features-section {
+    animation-delay: 0.6s;
+}
+.feature-card:nth-child(1) {
+    animation-delay: 0.8s;
+}
+.feature-card:nth-child(2) {
+    animation-delay: 1s;
+}
+.feature-card:nth-child(3) {
+    animation-delay: 1.2s;
+}
+.feature-card:nth-child(4) {
+    animation-delay: 1.4s;
+}
+.footer {
+    animation-delay: 1.6s;
+}

@@ -122,3 +122,10 @@ form button:hover {
     height: 16px;
     fill: white;
 }
+
+.btn.save {
+    background-color: #27ae60;
+}
+.btn.save:hover {
+    background-color: #1e8449;
+}
