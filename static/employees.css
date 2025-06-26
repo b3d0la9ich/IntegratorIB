@@ -1,0 +1,159 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+}
+
+.header {
+    background-color: #2c3e50;
+    padding: 20px;
+    color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.header h1 {
+    margin: 0 0 10px;
+}
+
+nav {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: #00d3ee;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.employee-list {
+    list-style: none;
+    padding: 0;
+}
+
+.employee-card {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.employee-card h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.employee-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.badge {
+    background-color: #3498db;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-left: 8px;
+}
+
+.project-list {
+    padding-left: 18px;
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+.project-list li {
+    margin: 5px 0;
+    font-size: 15px;
+}
+
+.status {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.status.done {
+    color: #2ecc71;
+}
+
+.status.active {
+    color: #f39c12;
+}
+
+.no-projects {
+    font-style: italic;
+    color: #777;
+    margin-top: 8px;
+}
+
+.filters {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filters a {
+    text-decoration: none;
+    color: #00bcd4;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.filters a:hover {
+    background-color: #e0f7fa;
+}
+
+.filters a.active {
+    color: #2c3e50;
+    background-color: #d0f0f7;
+    text-decoration: underline;
+}
+
+.btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+    background-color: #00d3ee;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: #00bbd4;
+}
+
+.btn.danger {
+    background-color: #dc3545;
+}
+
+.btn.danger:hover {
+    background-color: #b02a37;
+}

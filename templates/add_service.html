@@ -23,10 +23,9 @@
         <input type="date"
                id="execution_date"
                name="execution_date"
-               min="{{ current_date }}"
+               min="{{ project.start_date }}"
                {% if project.end_date %} max="{{ project.end_date }}" {% endif %}
-               required
-               onkeydown="return false;"> 
+               required>
 
         <p class="hint">Статус по умолчанию: <strong>в процессе</strong></p>
 
@@ -43,21 +42,28 @@ function isValidDateString(dateStr) {
 }
 
 function validateDate() {
-    const execDate = document.getElementById("execution_date").value;
-    if (!isValidDateString(execDate)) {
+    const execDate = document.getElementById("execution_date");
+    const selected = execDate.value;
+    const min = execDate.getAttribute("min");
+    const max = execDate.getAttribute("max");
+
+    if (!isValidDateString(selected)) {
         alert("Неверный формат даты выполнения!");
         return false;
     }
+
+    if (min && selected < min) {
+        alert("Дата не может быть раньше начала проекта.");
+        return false;
+    }
+
+    if (max && selected > max) {
+        alert("Дата не может быть позже даты окончания проекта.");
+        return false;
+    }
+
     return true;
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-    const execDate = document.getElementById("execution_date");
-    const today = new Date().toISOString().split("T")[0];
-    if (!execDate.getAttribute("min")) {
-        execDate.setAttribute("min", today);
-    }
-});
 </script>
 </body>
 </html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Сотрудники</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='employees.css') }}">
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <h1>Сотрудники и их проекты</h1>
+        <nav>
+            <a href="{{ url_for('dashboard') }}">← Назад в кабинет</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+
+    <div class="filters">
+        <strong>Фильтр:</strong>
+        <a href="{{ url_for('list_employees') }}" class="{{ 'active' if not filter else '' }}">Все</a>
+        <a href="{{ url_for('list_employees', filter='active') }}" class="{{ 'active' if filter == 'active' else '' }}">Только активные</a>
+        <a href="{{ url_for('list_employees', filter='empty') }}" class="{{ 'active' if filter == 'empty' else '' }}">Без проектов</a>
+    </div>
+
+    {% if employees %}
+        <ul class="employee-list">
+            {% for employee in employees %}
+                {% set done_projects = employee.projects|selectattr('status', 'equalto', 'завершён')|list %}
+                <li class="employee-card">
+                    <div class="employee-header">
+                        <h2>
+                            {{ employee.username }}
+                            {% if employee.is_admin %}
+                                <span class="badge">админ</span>
+                            {% endif %}
+                        </h2>
+
+                        {% if is_admin and not employee.is_admin and employee.id != session['user_id']
+                               and (employee.projects|length == 0 or done_projects|length == employee.projects|length) %}
+                            <form method="POST" action="{{ url_for('delete_employee', user_id=employee.id) }}"
+                                  onsubmit="return confirm('Удалить сотрудника?')" style="display:inline;">
+                                <button type="submit" class="btn danger">Удалить</button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+                    {% if employee.projects %}
+                        <p><strong>Проекты:</strong></p>
+                        <ul class="project-list">
+                            {% for project in employee.projects %}
+                                <li>
+                                    {{ project.name }} —
+                                    <span class="status {% if project.status == 'завершён' %}done{% else %}active{% endif %}">
+                                        {{ 'Завершён' if project.status == 'завершён' else 'Активный' }}
+                                    </span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="no-projects">Нет проектов</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="empty">Нет подходящих сотрудников по выбранному фильтру.</p>
+    {% endif %}
+</main>
+</body>
+</html>

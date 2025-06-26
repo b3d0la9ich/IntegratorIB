@@ -16,6 +16,7 @@
         <nav class="nav-links">
             <a href="{{ url_for('dashboard') }}">🏠 Личный кабинет</a>
             {% if session.get('is_admin') %}
+                <a href="{{ url_for('list_employees') }}">👥 Сотрудники</a>
                 <a href="{{ url_for('add_client') }}">➕ Добавить клиента</a>
             {% endif %}
             <a href="{{ url_for('logout') }}" class="logout">🚪 Выход</a>

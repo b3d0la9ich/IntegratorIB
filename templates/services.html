@@ -23,10 +23,7 @@
         {% for service in services %}
             <li class="service-card">
                 <div>
-                    <strong>{{ service.name }}</strong>
-                    <span class="status">
-                        ({{ 'Закрытый' if project.status == 'завершён' else 'Активный' }})
-                    </span><br>
+                    <strong>{{ service.service_type }}</strong><br>
                     <small>С {{ project.start_date }} по {{ project.end_date or "без срока" }}</small>
                 </div>
                 <div class="actions">

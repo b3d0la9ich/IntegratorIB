@@ -96,8 +96,7 @@ def dashboard():
         clients = Client.query.filter(Client.id.in_(client_ids)).all()
         return render_template("dashboard.html", user=user, clients=clients, is_admin=False)
 
-
-# 👥 Клиенты
+# Клиенты
 @app.route('/clients')
 def list_clients():
     if not session.get("user_id"):
@@ -111,7 +110,6 @@ def list_clients():
         clients = Client.query.filter(Client.id.in_(client_ids)).all()
 
     return render_template("clients.html", clients=clients)
-
 
 @app.route("/clients/add", methods=["GET", "POST"])
 def add_client():
@@ -163,6 +161,7 @@ def delete_client(client_id):
     flash("Клиент удалён", "info")
     return redirect(url_for("list_clients"))
 
+# Проекты
 @app.route("/projects/<int:client_id>")
 def list_projects(client_id):
     if "user_id" not in session:
@@ -240,12 +239,33 @@ def delete_project(project_id):
     flash("Проект удалён", "info")
     return redirect(url_for("list_projects", client_id=client_id))
 
+@app.route("/projects/<int:project_id>/complete", methods=["POST"])
+def complete_project(project_id):
+    print(f"📦 Завершение проекта {project_id}...")
+
+    project = Project.query.get_or_404(project_id)
+
+    if not is_admin() and project.user_id != session.get("user_id"):
+        flash("Нет прав завершить проект", "danger")
+        return redirect(url_for("dashboard"))
+
+    if any(service.status != "завершена" for service in project.services):
+        flash("Нельзя завершить проект — не все услуги завершены", "warning")
+        return redirect(url_for("list_services", project_id=project.id))
+
+
+    project.status = "завершён"  
+    db.session.commit()
+    flash("Проект успешно завершён!", "success")
+
+    return redirect(url_for("list_services", project_id=project.id))
+
+# Услуги
 @app.route("/services/<int:project_id>")
 def list_services(project_id):
     db.session.expire_all()  # сбрасываем кэшированные объекты
     project = Project.query.get_or_404(project_id)  # получаем актуальный объект
     return render_template("services.html", project=project, services=project.services)
-
 
 @app.route("/services/add/<int:project_id>", methods=["GET", "POST"])
 def add_service(project_id):
@@ -310,25 +330,52 @@ def delete_service(service_id):
     flash("Услуга удалена", "info")
     return redirect(url_for("list_services", project_id=project_id))
 
-@app.route("/projects/<int:project_id>/complete", methods=["POST"])
-def complete_project(project_id):
-    print(f"📦 Завершение проекта {project_id}...")
-
-    project = Project.query.get_or_404(project_id)
-
-    if not is_admin() and project.user_id != session.get("user_id"):
-        flash("Нет прав завершить проект", "danger")
+@app.route("/employees")
+def list_employees():
+    if not is_admin():
+        flash("Доступ только для администратора", "danger")
         return redirect(url_for("dashboard"))
 
-    if any(service.status != "завершена" for service in project.services):
-        flash("Нельзя завершить проект — не все услуги завершены", "warning")
-        return redirect(url_for("list_services", project_id=project.id))
+    filter_param = request.args.get("filter")
+    all_users = User.query.all()
 
-    project.status = "завершён"  # <== Вот здесь обновляется!
+    if filter_param == "empty":
+        employees = [u for u in all_users if len(u.projects) == 0]
+    elif filter_param == "active":
+        employees = [u for u in all_users if any(p.status != 'завершён' for p in u.projects)]
+    else:
+        employees = all_users
+
+    return render_template("employees.html", employees=employees, filter=filter_param, is_admin=True)
+
+@app.route("/employees/<int:user_id>/delete", methods=["POST"])
+def delete_employee(user_id):
+    if not is_admin():
+        flash("Доступ запрещён", "danger")
+        return redirect(url_for("dashboard"))
+
+    user = User.query.get_or_404(user_id)
+
+    if user.id == session.get("user_id"):
+        flash("Нельзя удалить самого себя", "warning")
+        return redirect(url_for("list_employees"))
+
+    if user.is_admin:
+        flash("Нельзя удалить администратора", "warning")
+        return redirect(url_for("list_employees"))
+
+    active_projects = Project.query.filter_by(user_id=user.id).filter(Project.status != 'завершён').count()
+    if active_projects > 0:
+        flash("Нельзя удалить сотрудника с незавершёнными проектами", "warning")
+        return redirect(url_for("list_employees"))
+
+    # (По желанию) удаление проектов сотрудника
+    Project.query.filter_by(user_id=user.id).delete()
+
+    db.session.delete(user)
     db.session.commit()
-    flash("Проект успешно завершён!", "success")
-
-    return redirect(url_for("list_services", project_id=project.id))
+    flash("Сотрудник удалён", "info")
+    return redirect(url_for("list_employees"))
 
 
 if __name__ == "__main__":

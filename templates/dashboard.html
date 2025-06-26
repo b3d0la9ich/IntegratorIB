@@ -15,7 +15,11 @@
       </div>
       <nav class="nav-links">
         <a href="{{ url_for('index') }}">🏠 Главная</a>
-        <a href="{{ url_for('list_clients') }}">👥 Клиенты</a>
+        {% if session.get('is_admin') %}
+          <a href="{{ url_for('list_employees') }}">👥 Сотрудники</a>
+          <a href="{{ url_for('add_client') }}">➕ Добавить клиента</a>
+        {% endif %}
+        <a href="{{ url_for('list_clients') }}">👨‍💻 Доступные клиенты</a>
         <a href="{{ url_for('logout') }}" class="logout">🚪 Выход</a>
       </nav>
     </aside>
@@ -30,6 +34,14 @@
           <p>Просмотр и управление клиентами компании</p>
           <a href="{{ url_for('list_clients') }}" class="card-link">Перейти →</a>
         </div>
+
+        {% if is_admin %}
+        <div class="card">
+          <h2>👥 Сотрудники</h2>
+          <p>Просмотр сотрудников компании</p>
+          <a href="{{ url_for('list_employees') }}" class="card-link">Перейти →</a>
+        </div>
+        {% endif %}
       </section>
     </main>
   </div>
