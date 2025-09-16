@@ -21,18 +21,44 @@ def parse_date_safe(date_str):
     except (ValueError, TypeError):
         return None
 
-with app.app_context():
+import click
+from werkzeug.security import generate_password_hash
+
+@app.cli.command("init-db")
+def init_db():
+    """Создать таблицы без Alembic (разово)."""
     db.create_all()
-    print("👤 Проверка администратора...")
-    admin = User.query.filter_by(username="admin").first()
-    if not admin:
-        admin = User(username="admin", is_admin=True)
-        admin.set_password("admin123")
+    click.echo("✅ Таблицы созданы")
+
+@app.cli.command("create-admin")
+@click.option("--username", "-u", default="admin")
+@click.option("--password", "-p", default="admin123")
+def create_admin(username, password):
+    """Создать администратора, если его нет."""
+    with app.app_context():
+        admin = User.query.filter_by(username=username).first()
+        if admin:
+            click.echo("⚠️ Админ уже существует")
+            return
+        admin = User(username=username, is_admin=True)
+        admin.set_password(password)
         db.session.add(admin)
         db.session.commit()
-        print("✅ Админ создан: admin/admin123")
-    else:
-        print("⚠️ Админ уже существует.")
+        click.echo(f"✅ Админ создан: {username}/{password}")
+
+
+# with app.app_context():
+#     db.create_all()
+#     print("👤 Проверка администратора...")
+#     admin = User.query.filter_by(username="admin").first()
+#     if not admin:
+#         admin = User(username="admin", is_admin=True)
+#         admin.set_password("admin123")
+#         db.session.add(admin)
+#         db.session.commit()
+#         print("✅ Админ создан: admin/admin123")
+#     else:
+#         print("⚠️ Админ уже существует.")
 
 @app.route("/")
 def index():
@@ -124,7 +150,7 @@ def add_client():
             phone=request.form["phone"],
             email=request.form["email"],
             industry=request.form["industry"],
-            user_id=session.get("user_id") 
+            user_id=session.get("user_id")
         )
         db.session.add(client)
         db.session.commit()
@@ -254,7 +280,7 @@ def complete_project(project_id):
         return redirect(url_for("list_services", project_id=project.id))
 
 
-    project.status = "завершён"  
+    project.status = "завершён"
     db.session.commit()
     flash("Проект успешно завершён!", "success")
 
@@ -274,7 +300,7 @@ def add_service(project_id):
     if not is_admin() and project.user_id != session["user_id"]:
         flash("Нет доступа к добавлению услуги", "danger")
         return redirect(url_for("dashboard"))
-    
+
     if project.status == "завершён":
         flash("Невозможно добавить услугу в завершённый проект.", "danger")
         return redirect(url_for("list_services", project_id=project.id))

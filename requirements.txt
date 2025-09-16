@@ -3,3 +3,8 @@ Flask-SQLAlchemy
 Flask-Migrate
 psycopg2-binary
 Werkzeug
+Flask
+Flask-Migrate>=4
+Flask-SQLAlchemy
+psycopg2-binary>=2.9
+gunicorn>=21

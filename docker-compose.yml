@@ -6,10 +6,15 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 4780
+      POSTGRES_PASSWORD: "4780"
       POSTGRES_DB: integrator_db
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d integrator_db || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
     networks:
       - integrator_network
 
@@ -17,11 +22,21 @@ services:
     build: .
     restart: always
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
+      # host = db (имя сервиса!), не localhost
       DATABASE_URL: postgresql://postgres:4780@db:5432/integrator_db
+      FLASK_APP: app.py
     ports:
       - "5000:5000"
+    command: >
+      bash -lc "
+      python wait_for_db.py &&
+      (flask db upgrade || flask init-db) &&
+      flask create-admin -u admin -p admin123 &&
+      gunicorn -w 3 -b 0.0.0.0:5000 app:app
+      "
     networks:
       - integrator_network
 
