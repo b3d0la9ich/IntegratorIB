@@ -71,3 +71,26 @@ button {
 button:hover {
     background-color: #00bbd4;
 }
+
+.flash-container {
+    margin-bottom: 20px;
+}
+
+.flash-message {
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.flash-message.danger {
+    background: #ffe0e0;
+    color: #8a0000;
+    border: 1px solid #ffb4b4;
+}
+
+.flash-message.success {
+    background: #e4ffe8;
+    color: #006d2a;
+    border: 1px solid #9affc2;
+}

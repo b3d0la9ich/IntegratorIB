@@ -3,6 +3,8 @@ from flask_migrate import Migrate
 from models import db, User, Client, Project, Service
 from datetime import datetime
 from datetime import date
+from sqlalchemy import func
+
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:4780@db/integrator_db"
@@ -144,8 +146,16 @@ def add_client():
         return redirect(url_for("list_clients"))
 
     if request.method == "POST":
+        name = request.form["name"].strip()
+
+        # 🔍 проверяем, что организации с таким именем ещё нет (без учёта регистра)
+        existing = Client.query.filter(func.lower(Client.name) == func.lower(name)).first()
+        if existing:
+            flash("Организация с таким названием уже существует", "danger")
+            return redirect(url_for("add_client"))
+
         client = Client(
-            name=request.form["name"],
+            name=name,
             contact_name=request.form["contact_name"],
             phone=request.form["phone"],
             email=request.form["email"],
@@ -158,6 +168,7 @@ def add_client():
         return redirect(url_for("list_clients"))
 
     return render_template("add_client.html")
+
 
 @app.route("/clients/<int:client_id>/edit", methods=["POST"])
 def edit_client(client_id):

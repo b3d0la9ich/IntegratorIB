@@ -5,6 +5,7 @@
     <title>Добавить клиента</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='add_client.css') }}">
 </head>
+
 <script>
     function validateClientForm() {
         const name = document.querySelector('[name="name"]');
@@ -15,7 +16,8 @@
         }
         return true;
     }
-</script>    
+</script>
+
 <body>
     <header class="header">
         <div class="container">
@@ -27,20 +29,33 @@
     </header>
 
     <main class="container">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
         <form method="POST" class="form-card" onsubmit="return validateClientForm()">
             <input type="text" name="name" placeholder="Название организации" required pattern=".*\S.*" title="Это поле обязательно">
-            
+
             <input type="text" name="contact_name" placeholder="Контактное лицо">
-            
+
             <input type="tel" name="phone" placeholder="Телефон" pattern="^\+?\d{10,15}$"
                    title="Введите номер от 10 до 15 цифр, можно начинать с +">
-            
+
             <input type="email" name="email" placeholder="Email">
-            
+
             <input type="text" name="industry" placeholder="Сфера деятельности">
-            
+
             <button type="submit">Сохранить</button>
-        </form>        
+        </form>
     </main>
 </body>
 </html>
