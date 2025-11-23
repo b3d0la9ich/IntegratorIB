@@ -1,109 +1,141 @@
+/* Фон и базовый текст */
 body {
     margin: 0;
     padding: 0;
-    font-family: "Segoe UI", Tahoma, sans-serif;
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
-    background-size: 400% 400%;
-    animation: gradientMove 12s ease infinite;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.login-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 20px;
-}
-
-.login-box {
-    background-color: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    border-radius: 12px;
-    padding: 40px 30px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    text-align: center;
-    width: 100%;
-    max-width: 380px;
-    animation: fadeIn 1.2s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.login-box h2 {
-    margin-bottom: 20px;
-    color: #ffffff;
-    font-size: 24px;
-}
-
-.login-box form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.login-box input {
-    padding: 10px;
-    border-radius: 6px;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    background-color: #ffffff;
-    color: #222;
-}
-
-.login-box button {
-    padding: 10px;
-    border: none;
-    border-radius: 6px;
-    background-color: #00bfff;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(to right, #1e3c72, #2a5298);
     color: white;
+}
+
+/* Обёртка формы */
+.login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Карточка формы (и логин, и регистрация) */
+.login-box {
+    background-color: #0d1b2a;
+    padding: 40px 48px;
+    border-radius: 14px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.25);
+    width: 420px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Заголовок */
+.login-box h2 {
+    color: #00d3ee;
+    margin: 0 0 24px;
+    font-size: 26px;
+}
+
+/* Поля ввода */
+.login-box input[type="text"],
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.login-box input:focus {
+    outline: none;
+    box-shadow: 0 0 4px #00d3ee;
+}
+
+/* Кнопка */
+.login-box button {
+    width: 100%;
+    background-color: #00d3ee;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: background 0.3s ease;
+    margin-top: 18px;
+    transition: background 0.2s ease;
 }
 
 .login-box button:hover {
-    background-color: #009fd4;
+    background-color: #00bbd4;
 }
 
+/* Ссылки под формой */
 .login-box .link {
-    color: #ccc;
-    margin-top: 10px;
+    margin-top: 18px;
+    color: #ddd;
     font-size: 14px;
 }
 
-.login-box .link a {
-    color: #00e1ff;
-    font-weight: bold;
+.login-box a {
+    color: #00d3ee;
     text-decoration: none;
+    font-weight: 600;
 }
 
-.login-box .link a:hover {
+.login-box a:hover {
     text-decoration: underline;
 }
 
 .login-box .home-link {
-    display: block;
-    margin-top: 12px;
-    color: #a0cfff;
-    font-size: 14px;
-    text-decoration: none;
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #c0d0ff;
 }
 
-.login-box .home-link:hover {
-    text-decoration: underline;
+/* ---- СПЕЦИАЛИЗАЦИИ (РЕГИСТРАЦИЯ) ---- */
+
+.specializations-block {
+    margin-top: 18px;
+    margin-bottom: 4px;
+    text-align: left;
+}
+
+.specializations-title {
+    margin: 0 0 8px;
+    font-size: 15px;
+    color: #cfe8ff;
+}
+
+/* сетка чекбоксов – две колонки */
+.specializations-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 16px;
+    margin-bottom: 4px;
+}
+
+.specialization-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #e4f4ff;
+    white-space: nowrap;
+}
+
+.specialization-item input[type="checkbox"] {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+/* сообщение, если сфер нет */
+.no-industries {
+    grid-column: 1 / -1;
+    font-size: 13px;
+    color: #ffdcdc;
+    background: rgba(255, 50, 50, 0.15);
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
 }

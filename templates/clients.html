@@ -46,20 +46,42 @@
                         </form>
                     </div>
 
+                    <!-- Детали клиента -->
                     <div id="details-{{ client.id }}" class="client-details collapsible">
                         <p><strong>Контакт:</strong> {{ client.contact_name or '—' }}</p>
                         <p><strong>Телефон:</strong> {{ client.phone or '—' }}</p>
                         <p><strong>Email:</strong> {{ client.email or '—' }}</p>
-                        <p><strong>Сфера деятельности:</strong> {{ client.industry or '—' }}</p>
+                        <p><strong>Сфера деятельности:</strong>
+                            {% if client.industry %}
+                                {{ client.industry.name }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </p>
                     </div>
 
-                    <form method="POST" action="{{ url_for('edit_client', client_id=client.id) }}"
-                          id="edit-{{ client.id }}" class="edit-form collapsible" onsubmit="return validateForm({{ client.id }})">
+                    <!-- Форма редактирования клиента -->
+                    <form method="POST"
+                          action="{{ url_for('edit_client', client_id=client.id) }}"
+                          id="edit-{{ client.id }}"
+                          class="edit-form collapsible"
+                          onsubmit="return validateForm({{ client.id }})">
+
                         <input name="name" id="name-{{ client.id }}" value="{{ client.name }}" required />
                         <input name="contact_name" id="contact-{{ client.id }}" value="{{ client.contact_name }}">
                         <input name="phone" id="phone-{{ client.id }}" value="{{ client.phone }}">
                         <input name="email" id="email-{{ client.id }}" value="{{ client.email }}">
-                        <input name="industry" id="industry-{{ client.id }}" value="{{ client.industry }}">
+
+                        <select name="industry_id" id="industry-{{ client.id }}">
+                            <option value="">Сфера не выбрана</option>
+                            {% for ind in industries %}
+                                <option value="{{ ind.id }}"
+                                    {% if client.industry and client.industry.id == ind.id %}selected{% endif %}>
+                                    {{ ind.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
                         <button type="submit" class="btn save">Сохранить</button>
                     </form>
                 </li>

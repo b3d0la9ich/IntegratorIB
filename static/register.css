@@ -1,14 +1,4 @@
-.header a,
-.header a:visited {
-    color: #00d3ee;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.header a:hover {
-    text-decoration: underline;
-}
-
+/* Фон и базовый текст */
 body {
     margin: 0;
     padding: 0;
@@ -17,45 +7,51 @@ body {
     color: white;
 }
 
-.header {
-    background-color: #0d1b2a;
-    padding: 20px;
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
+/* Обёртка формы */
+.login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.auth-container {
+/* Карточка формы (и логин, и регистрация) */
+.login-box {
     background-color: #0d1b2a;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    max-width: 400px;
-    margin: 100px auto;
+    padding: 40px 48px;
+    border-radius: 14px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.25);
+    width: 420px;
+    box-sizing: border-box;
     text-align: center;
 }
 
-.auth-container h2 {
+/* Заголовок */
+.login-box h2 {
     color: #00d3ee;
-    margin-bottom: 25px;
+    margin: 0 0 24px;
+    font-size: 26px;
 }
 
-.auth-container input {
+/* Поля ввода */
+.login-box input[type="text"],
+.login-box input[type="password"] {
     width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 20px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
     border: none;
     border-radius: 8px;
     font-size: 16px;
     box-sizing: border-box;
 }
 
-.auth-container input:focus {
+.login-box input:focus {
     outline: none;
     box-shadow: 0 0 4px #00d3ee;
 }
 
-.auth-container button {
+/* Кнопка */
+.login-box button {
     width: 100%;
     background-color: #00d3ee;
     color: white;
@@ -65,23 +61,81 @@ body {
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: background 0.3s ease;
+    margin-top: 18px;
+    transition: background 0.2s ease;
 }
 
-.auth-container button:hover {
+.login-box button:hover {
     background-color: #00bbd4;
 }
 
-.auth-container p {
-    margin-top: 20px;
+/* Ссылки под формой */
+.login-box .link {
+    margin-top: 18px;
     color: #ddd;
+    font-size: 14px;
 }
 
-.auth-container a {
+.login-box a {
     color: #00d3ee;
     text-decoration: none;
+    font-weight: 600;
 }
 
-.auth-container a:hover {
+.login-box a:hover {
     text-decoration: underline;
+}
+
+.login-box .home-link {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #c0d0ff;
+}
+
+/* ---- СПЕЦИАЛИЗАЦИИ (РЕГИСТРАЦИЯ) ---- */
+
+.specializations-block {
+    margin-top: 18px;
+    margin-bottom: 4px;
+    text-align: left;
+}
+
+.specializations-title {
+    margin: 0 0 8px;
+    font-size: 15px;
+    color: #cfe8ff;
+}
+
+/* сетка чекбоксов – две колонки */
+.specializations-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 16px;
+    margin-bottom: 4px;
+}
+
+.specialization-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #e4f4ff;
+    white-space: nowrap;
+}
+
+.specialization-item input[type="checkbox"] {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+/* сообщение, если сфер нет */
+.no-industries {
+    grid-column: 1 / -1;
+    font-size: 13px;
+    color: #ffdcdc;
+    background: rgba(255, 50, 50, 0.15);
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
 }

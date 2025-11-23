@@ -27,9 +27,15 @@
 
             <label>Ответственный сотрудник:</label>
             <select name="user_id" required>
-                {% for user in users %}
-                    <option value="{{ user.id }}">{{ user.username }}{% if user.is_admin %} (админ){% endif %}</option>
-                {% endfor %}
+                {% if users %}
+                    {% for user in users %}
+                        <option value="{{ user.id }}">
+                            {{ user.username }} — {{ user.qualification }}
+                        </option>
+                    {% endfor %}
+                {% else %}
+                    <option value="" disabled>Нет подходящих сотрудников для сферы клиента</option>
+                {% endif %}
             </select>
 
             <button type="submit">Сохранить</button>

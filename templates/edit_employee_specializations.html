@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Специализации сотрудника</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='employees.css') }}">
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <h1>Специализации: {{ employee.username }}</h1>
+        <nav>
+            <a href="{{ url_for('list_employees') }}">← Назад к сотрудникам</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="form-card">
+        <p><strong>Квалификация:</strong> {{ employee.qualification }}</p>
+
+        <label>Сферы деятельности (специализации):</label>
+        <div class="checkbox-group">
+            {% for industry in industries %}
+                <label class="checkbox-item">
+                    <input type="checkbox"
+                           name="industry_ids"
+                           value="{{ industry.id }}"
+                           {% if industry in employee.industries %}checked{% endif %}>
+                    {{ industry.name }}
+                </label>
+            {% endfor %}
+        </div>
+
+        <button type="submit">Сохранить</button>
+    </form>
+</main>
+</body>
+</html>
