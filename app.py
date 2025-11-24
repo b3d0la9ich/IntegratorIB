@@ -45,7 +45,8 @@ def create_admin(username, password):
         if admin:
             click.echo("⚠️ Админ уже существует")
             return
-        admin = User(username=username, is_admin=True, qualification="expert")
+        # Админ как руководитель направления ИБ
+        admin = User(username=username, is_admin=True, qualification="руководитель направления ИБ")
         admin.set_password(password)
         db.session.add(admin)
         db.session.commit()
@@ -73,11 +74,12 @@ def seed_data():
 
         db.session.flush()
 
+        # Квалификации переписаны под ИБ
         employees = [
-            ("ivan_sec", "123", "middle", ["Банковский сектор", "ИТ-компании"]),
-            ("petr_gov", "123", "senior", ["Госструктуры"]),
-            ("olga_ind", "123", "junior", ["Промышленность"]),
-            ("dmitry_rt", "123", "expert", ["Ритейл", "Банковский сектор"]),
+            ("ivan_sec", "123", "специалист ИБ", ["Банковский сектор", "ИТ-компании"]),
+            ("petr_gov", "123", "ведущий специалист ИБ", ["Госструктуры"]),
+            ("olga_ind", "123", "младший специалист ИБ", ["Промышленность"]),
+            ("dmitry_rt", "123", "руководитель направления ИБ", ["Ритейл", "Банковский сектор"]),
         ]
 
         for username, pwd, qual, specs in employees:
@@ -116,7 +118,7 @@ def register():
             flash("Имя пользователя уже занято", "danger")
             return redirect(url_for("register"))
 
-        user = User(username=username)  # qualification по умолчанию = junior
+        user = User(username=username)  # qualification по умолчанию = "специалист ИБ"
         user.set_password(password)
 
         industry_ids = request.form.getlist("industry_ids")
@@ -475,7 +477,6 @@ def list_employees():
         employees = [u for u in all_users if len(u.projects) == 0]
     elif filter_param == "active":
         employees = [u for u in all_users if any(p.status != 'завершён' for p in u.projects)]
-        # иначе все
     else:
         employees = all_users
 
@@ -533,6 +534,20 @@ def delete_employee(user_id):
     db.session.commit()
     flash("Сотрудник удалён", "info")
     return redirect(url_for("list_employees"))
+
+@app.route("/about")
+def about_page():
+    return render_template("about.html")
+
+
+@app.route("/platform")
+def platform_page():
+    return render_template("platform.html")
+
+
+@app.route("/ib-services")
+def services_page():
+    return render_template("services_info.html")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Услуги — Интегратор ИБ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+
+    {% include 'partials/topbar.html' ignore missing %}
+
+    <!-- если partial нет, можно просто скопировать header из index.html.
+       Ниже дам вариант уже с хедером. -->
+
+    <header class="top-bar">
+        <div class="top-inner">
+            <div class="logo-block">
+                <div class="logo-mark">IB</div>
+                <div class="logo-text">
+                    <div class="logo-title">IntegratorIB</div>
+                    <div class="logo-subtitle">Информационная безопасность</div>
+                </div>
+            </div>
+
+            <nav class="main-nav">
+                <a href="{{ url_for('services_page') }}">Услуги</a>
+                <a href="{{ url_for('platform_page') }}">Возможности платформы</a>
+                <a href="{{ url_for('about_page') }}">О компании</a>
+            </nav>
+
+            <div class="header-actions">
+                {% if session.get("user_id") %}
+                    <a class="btn header-btn ghost" href="{{ url_for('dashboard') }}">Кабинет</a>
+                    <a class="btn header-btn primary" href="{{ url_for('logout') }}">Выход</a>
+                {% else %}
+                    <a class="btn header-btn ghost" href="{{ url_for('login') }}">Вход</a>
+                    <a class="btn header-btn primary" href="{{ url_for('register') }}">Регистрация</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        <section class="hero">
+            <div class="hero-card">
+                <div class="hero-left">
+                    <p class="hero-kicker">Услуги IntegratorIB</p>
+                    <h1 class="hero-title">Комплексные проекты по информационной безопасности</h1>
+                    <p class="hero-text">
+                        Закрываем задачи заказчика по защите информации: от обследования и разработки
+                        документации до внедрения, аттестации и сопровождения.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Основные направления</h2>
+            </div>
+
+            <div class="cards-grid">
+                <article class="service-card">
+                    <h3>Проектирование и внедрение систем защиты</h3>
+                    <p>Проектируем архитектуру ИБ, подбираем СЗИ, выполняем внедрение и настройку с учётом требований ФСТЭК и ФСБ.</p>
+                </article>
+                <article class="service-card">
+                    <h3>Аудит информационной безопасности</h3>
+                    <p>Проводим технический и организационный аудит, анализ рисков и готовности к регуляторным проверкам.</p>
+                </article>
+                <article class="service-card">
+                    <h3>Организационно-распорядительная документация</h3>
+                    <p>Разрабатываем политики, регламенты, модели угроз, инструкции пользователей и администраторов.</p>
+                </article>
+                <article class="service-card">
+                    <h3>Аттестация объектов информатизации</h3>
+                    <p>Готовим объект к аттестации, сопровождаем взаимодействие с аттестующей организацией и регуляторами.</p>
+                </article>
+                <article class="service-card">
+                    <h3>Мониторинг и реагирование на инциденты</h3>
+                    <p>Выстраиваем процесс регистрации, расследования и устранения инцидентов ИБ, формируем отчётность.</p>
+                </article>
+                <article class="service-card">
+                    <h3>Обучение и повышение осведомлённости</h3>
+                    <p>Проводим тренинги и обучающие программы для сотрудников и ИТ-персонала по вопросам ИБ.</p>
+                </article>
+            </div>
+
+            <p class="license-note">
+                Компания имеет лицензию ФСТЭК России на деятельность по технической защите конфиденциальной информации.
+            </p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        © 2025 Интегратор ИБ.
+    </footer>
+</div>
+</body>
+</html>

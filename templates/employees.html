@@ -30,8 +30,7 @@
     <table class="employees-table">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Логин</th>
+            <th>Сотрудник</th>
             <th>Квалификация</th>
             <th>Специализации (сферы)</th>
             <th>Активные проекты</th>
@@ -41,7 +40,6 @@
         <tbody>
         {% for emp in employees %}
             <tr>
-                <td>{{ emp.id }}</td>
                 <td>
                     {{ emp.username }}
                     {% if emp.is_admin %}<span class="badge">админ</span>{% endif %}
@@ -62,7 +60,9 @@
                         Специализации
                     </a>
 
-                    <form method="POST" action="{{ url_for('delete_employee', user_id=emp.id) }}" onsubmit="return confirm('Удалить сотрудника?');">
+                    <form method="POST"
+                          action="{{ url_for('delete_employee', user_id=emp.id) }}"
+                          onsubmit="return confirm('Удалить сотрудника?');">
                         <button type="submit" class="btn-sm btn-danger">Удалить</button>
                     </form>
                 </td>

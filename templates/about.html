@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>О компании — Интегратор ИБ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+
+    <header class="top-bar">
+        <div class="top-inner">
+            <div class="logo-block">
+                <div class="logo-mark">IB</div>
+                <div class="logo-text">
+                    <div class="logo-title">IntegratorIB</div>
+                    <div class="logo-subtitle">Информационная безопасность</div>
+                </div>
+            </div>
+
+            <nav class="main-nav">
+                <a href="{{ url_for('services_page') }}">Услуги</a>
+                <a href="{{ url_for('platform_page') }}">Возможности платформы</a>
+                <a href="{{ url_for('about_page') }}">О компании</a>
+            </nav>
+
+            <div class="header-actions">
+                {% if session.get("user_id") %}
+                    <a class="btn header-btn ghost" href="{{ url_for('dashboard') }}">Кабинет</a>
+                    <a class="btn header-btn primary" href="{{ url_for('logout') }}">Выход</a>
+                {% else %}
+                    <a class="btn header-btn ghost" href="{{ url_for('login') }}">Вход</a>
+                    <a class="btn header-btn primary" href="{{ url_for('register') }}">Регистрация</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        <section class="hero">
+            <div class="hero-card">
+                <div class="hero-left">
+                    <p class="hero-kicker">О компании</p>
+                    <h1 class="hero-title">IntegratorIB — интегратор в области информационной безопасности</h1>
+                    <p class="hero-text">
+                        Мы фокусируемся на построении систем защиты информации для коммерческих организаций и
+                        госструктур, объединяя экспертизу по регуляторным требованиям и практический опыт внедрения решений ИБ.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section about-section">
+            <div class="about-card">
+                <h2>Кто мы</h2>
+                <p>
+                    «Интегратор ИБ» — команда специалистов по информационной безопасности, сетям и системному администрированию.
+                    Мы сопровождаем заказчиков на всех этапах: от первичного обследования и разработки концепции защиты
+                    до внедрения, аттестации и дальнейшей эксплуатации решений.
+                </p>
+
+                <h2>Контакты</h2>
+                <p>
+                    <strong>Контактный телефон:</strong> +7 (913) 000-00-00<br>
+                    <strong>Email:</strong> info@integratorib.local<br>
+                    <strong>Адрес:</strong> г. Новосибирск, ул. Примерная, д. 10, офис 42
+                </p>
+
+                <h2>Лицензии</h2>
+                <p>
+                    Компания имеет лицензию ФСТЭК России на деятельность по технической защите конфиденциальной информации.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        © 2025 Интегратор ИБ.
+    </footer>
+</div>
+</body>
+</html>

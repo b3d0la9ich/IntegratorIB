@@ -28,16 +28,18 @@ class Industry(db.Model):
     def __repr__(self):
         return f"<Industry {self.id} {self.name}>"
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
-    # уровень сотрудника
-    qualification = db.Column(db.String(50), nullable=False, default="junior")
+    # Уровень сотрудника ИБ
+    # Примеры: "младший специалист ИБ", "специалист ИБ", "ведущий специалист ИБ", "руководитель направления ИБ"
+    qualification = db.Column(db.String(50), nullable=False, default="специалист ИБ")
 
-    # в каких сферах он специалист
+    # В каких сферах он специалист
     industries = db.relationship(
         "Industry",
         secondary=user_industries,
@@ -61,7 +63,7 @@ class Client(db.Model):
     email = db.Column(db.String(100))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # ссылка на сферу деятельности
+    # Ссылка на сферу деятельности
     industry_id = db.Column(db.Integer, db.ForeignKey("industry.id"))
     industry = db.relationship("Industry", back_populates="clients")
 

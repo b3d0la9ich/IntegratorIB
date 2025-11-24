@@ -25,15 +25,18 @@
                 <div>
                     <strong>{{ project.name }}</strong>
                     <span class="status">({{ project.status }})</span><br>
-                    <small>С {{ project.start_date }} по {{ project.end_date or "без срока" }}</small>
+                    <small>С {{ project.start_date }} по {{ project.end_date or "без срока" }}</small><br>
+                    <small><strong>Ответственный:</strong> {{ project.user.username }}</small>
                 </div>
                 <div class="actions">
                     {% if project.status != 'завершён' %}
-                    <a class="btn" href="{{ url_for('list_services', project_id=project.id) }}">Услуги</a>
+                        <a class="btn" href="{{ url_for('list_services', project_id=project.id) }}">Услуги</a>
                     {% endif %}
                     {% if session.get('is_admin') %}
-                        <form method="POST" action="{{ url_for('delete_project', project_id=project.id) }}"
-                              style="display:inline;" onsubmit="return confirm('Удалить проект?')">
+                        <form method="POST"
+                              action="{{ url_for('delete_project', project_id=project.id) }}"
+                              style="display:inline;"
+                              onsubmit="return confirm('Удалить проект?')">
                             <button type="submit" class="btn danger">
                                 <svg viewBox="0 0 24 24">
                                     <path d="M6 7h12v2H6V7zm2 4h8v10H8V11zm2-7h4v2h-4V4z"/>
